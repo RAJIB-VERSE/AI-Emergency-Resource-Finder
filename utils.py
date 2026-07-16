@@ -601,9 +601,9 @@ def get_emergency_css(dark_mode: bool = True) -> str:
         }}
 
         /* ── Streamlit Overrides ── */
-        /* Hide default Streamlit menu and header for production */
+        /* Hide default Streamlit menu for production */
         #MainMenu {{visibility: hidden;}}
-        header {{visibility: hidden;}}
+        .stDeployButton {{display: none;}}
 
         .stSelectbox label, .stTextInput label {{
             font-weight: 600 !important;
