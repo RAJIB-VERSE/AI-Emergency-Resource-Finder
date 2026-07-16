@@ -604,6 +604,10 @@ def get_emergency_css(dark_mode: bool = True) -> str:
         /* Hide default Streamlit menu for production */
         #MainMenu {{visibility: hidden;}}
         .stDeployButton {{display: none;}}
+        [data-testid="stToolbar"] {{visibility: hidden;}}
+        [data-testid="stDecoration"] {{display: none;}}
+        /* Hide Streamlit Cloud "Fork" badge */
+        .viewerBadge_container {{display: none !important;}}
 
         .stSelectbox label, .stTextInput label {{
             font-weight: 600 !important;
