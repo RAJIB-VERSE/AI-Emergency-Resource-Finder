@@ -8,6 +8,8 @@
 
 > **Find the nearest emergency services in seconds.** An AI-powered application that helps users quickly locate hospitals, blood banks, police stations, fire stations, pharmacies, and emergency shelters based on their location — with intelligent emergency guidance and first-aid tips.
 
+🚀 **Live Demo:** [first-aid-ai-locator.streamlit.app](https://first-aid-ai-locator.streamlit.app)
+
 ---
 
 ## ✨ Features
