@@ -600,6 +600,10 @@ def get_emergency_css(dark_mode: bool = True) -> str:
         }}
 
         /* ── Streamlit Overrides ── */
+        /* Hide default Streamlit menu and header for production */
+        #MainMenu {{visibility: hidden;}}
+        header {{visibility: hidden;}}
+
         .stSelectbox label, .stTextInput label {{
             font-weight: 600 !important;
             font-size: 0.95rem !important;
