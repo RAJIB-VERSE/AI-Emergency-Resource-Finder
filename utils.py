@@ -21,7 +21,7 @@ APP_SUBTITLE: str = "Find the nearest emergency services in seconds."
 APP_VERSION: str = "2.0.0"
 AUTHOR_NAME: str = "Rajib"
 GITHUB_URL: str = "https://github.com/RAJIB-VERSE"
-LINKEDIN_URL: str = "https://linkedin.com"
+LINKEDIN_URL: str = "https://www.linkedin.com/in/rajib-chatterjee-bb5963369"
 
 # Default search radius in meters
 DEFAULT_SEARCH_RADIUS: int = 5000
