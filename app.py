@@ -13,6 +13,7 @@ Main Streamlit application with:
 Run with:  streamlit run app.py
 """
 
+import html
 import streamlit as st
 import pandas as pd
 from streamlit_folium import st_folium
@@ -153,11 +154,12 @@ with st.sidebar:
                 gen_result = generate_ai_guidance(user_query, emergency_type)
 
             if gen_result:
+                safe_guidance = html.escape(gen_result['guidance'])
                 gen_html = f"""
                 <div class="ai-generative-box">
                     <h4>{t('ai_guidance', lang)}</h4>
                     <span class="model-badge"><i class="fa-solid fa-microchip"></i> {gen_result['model']}</span>
-                    <p>{gen_result['guidance']}</p>
+                    <p>{safe_guidance}</p>
                 </div>
                 """
                 st.markdown(gen_html, unsafe_allow_html=True)

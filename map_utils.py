@@ -5,6 +5,7 @@ Handles querying OpenStreetMap via the Overpass API for emergency services,
 and generates interactive Folium maps with color-coded markers.
 """
 
+import html
 import time
 from typing import Optional
 
@@ -280,13 +281,17 @@ def create_emergency_map(
         label = SERVICE_LABELS.get(service_type, service_type)
 
         for place in results[:10]:  # Limit to 10 markers per type
+            safe_name = html.escape(place['name'])
+            safe_addr = html.escape(place['address']) if place['address'] else ""
+            safe_phone = html.escape(place['phone']) if place['phone'] else ""
+            
             popup_html = f"""
             <div style="font-family: Inter, sans-serif; min-width: 180px;">
-                <b style="font-size: 13px;">{emoji} {place['name']}</b><br>
+                <b style="font-size: 13px;">{emoji} {safe_name}</b><br>
                 <span style="color: #666; font-size: 11px;">{label}</span><br>
                 <span style="font-size: 11px;">📏 {place['distance']} km away</span><br>
-                {'<span style="font-size: 11px;">📍 ' + place["address"] + '</span><br>' if place["address"] else ''}
-                {'<span style="font-size: 11px;">📞 ' + place["phone"] + '</span><br>' if place["phone"] else ''}
+                {'<span style="font-size: 11px;">📍 ' + safe_addr + '</span><br>' if safe_addr else ''}
+                {'<span style="font-size: 11px;">📞 ' + safe_phone + '</span><br>' if safe_phone else ''}
                 <a href="{place['osm_link']}" target="_blank" style="font-size: 11px; color: #FF6B35;">
                     🔗 View on OSM
                 </a>

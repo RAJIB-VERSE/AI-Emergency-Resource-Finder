@@ -7,6 +7,7 @@ with copy-to-clipboard and emergency dial links.
 """
 
 import math
+import html
 from typing import Optional
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut, GeocoderUnavailable
@@ -723,8 +724,12 @@ def render_service_card(
     """
     from translations import t
 
-    addr_display = address if address else t("address_not_available", lang)
-    addr_safe = address.replace("'", "\\'").replace('"', "&quot;") if address else ""
+    safe_name = html.escape(name)
+    safe_addr = html.escape(address) if address else ""
+    safe_phone = html.escape(phone) if phone else ""
+
+    addr_display = safe_addr if safe_addr else t("address_not_available", lang)
+    addr_safe = safe_addr.replace("'", "\\'") if safe_addr else ""
 
     # Copy address button (JavaScript clipboard API)
     copy_btn = ""
@@ -747,7 +752,7 @@ def render_service_card(
 
     return f"""
     <div class="service-card">
-        <h4>{icon} {name}</h4>
+        <h4>{icon} {safe_name}</h4>
         <p><i class="fa-solid fa-location-dot fa-icon-service"></i> {addr_display}</p>
         <span class="distance-badge"><i class="fa-solid fa-ruler"></i> {distance} {t("km_away", lang)}</span>
         <div class="card-actions">
