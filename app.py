@@ -41,6 +41,7 @@ from ai_helper import (
 )
 from first_aid import get_first_aid_tips, get_cpr_guide
 from translations import t, get_lang_code, SUPPORTED_LANGUAGES
+from analytics_helper import update_analytics, get_analytics_summary
 
 
 # ─────────────────────────────────────────────
@@ -130,10 +131,18 @@ with st.sidebar:
             em_icon = EMERGENCY_TYPES.get(emergency_type, {}).get("icon", "🚑")
             em_name = t(emergency_type, lang)
 
+            reasons_html = ""
+            if result.get("reasons"):
+                reasons_html = f"<p style='margin-bottom: 2px;'><strong>{t('detected_because', lang)}</strong></p><ul style='list-style-type: none; padding-left: 0; margin-top: 0;'>"
+                for reason in result["reasons"]:
+                    reasons_html += f"<li><span style='color: #10B981;'>✓</span> {reason}</li>"
+                reasons_html += "</ul>"
+
             ai_html = f"""
             <div class="ai-response-box">
                 <h4>{t('ai_analysis_result', lang)}</h4>
                 <p><strong>{t('detected_emergency', lang)}:</strong> {em_icon} {em_name}</p>
+                {reasons_html}
                 <p><strong>{t('urgency_level', lang)}:</strong> {urgency_icon} {urgency}</p>
                 <p><strong>{t('confidence', lang)}:</strong> {confidence:.0%} ({method.replace('_', ' ').title()})</p>
                 <hr style="border-color: rgba(59,130,246,0.15); margin: 0.6rem 0;">
@@ -224,6 +233,26 @@ st.markdown(
 
 
 # ─────────────────────────────────────────────
+# Analytics Dashboard
+# ─────────────────────────────────────────────
+
+with st.expander(f"📊 {t('analytics_dashboard', lang)}", expanded=False):
+    summary = get_analytics_summary()
+    
+    col1, col2, col3 = st.columns(3)
+    col1.metric(t("total_searches_stat", lang), summary["total_searches"])
+    col2.metric(t("hospitals_found_stat", lang), summary["hospitals_found"])
+    col3.metric(t("blood_banks_nearby_stat", lang), summary["blood_banks_found"])
+    
+    col4, col5 = st.columns(2)
+    col4.metric(t("average_distance_stat", lang), f'{summary["average_distance"]} km')
+    col5.metric(t("most_common_emergency_stat", lang), t(summary["most_common_emergency"], lang))
+    
+    st.markdown(f"**{t('search_history_stat', lang)}**: " + ", ".join(summary["search_history"] if summary["search_history"] else ["None"]))
+
+st.markdown("---")
+
+# ─────────────────────────────────────────────
 # Emergency Type & Location Input
 # ─────────────────────────────────────────────
 
@@ -283,6 +312,21 @@ if search_clicked and city_input:
 
         # Count total results
         total_found = sum(len(v) for v in services.values())
+        hospitals_found = len(services.get("hospital", []))
+        blood_banks_found = len(services.get("blood_bank", []))
+        
+        # Calculate average distance for analytics
+        avg_dist = 0.0
+        dist_count = 0
+        for s_type, places in services.items():
+            for p in places:
+                avg_dist += p["distance"]
+                dist_count += 1
+        if dist_count > 0:
+            avg_dist = round(avg_dist / dist_count, 2)
+
+        # Update Analytics
+        update_analytics(display_name.split(",")[0], selected_emergency, hospitals_found, blood_banks_found, avg_dist)
 
         # ── Stats Row ──
         st.markdown(

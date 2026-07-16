@@ -146,20 +146,24 @@ def classify_emergency_local(text: str) -> dict:
         text: User's emergency description.
 
     Returns:
-        Dict with 'emergency_type', 'confidence', and 'method'.
+        Dict with 'emergency_type', 'confidence', 'method', and 'reasons'.
     """
     import re
     text_lower = text.lower().strip()
     scores: dict[str, int] = {}
+    matched_reasons = {}
 
     for emergency_type, keywords in KEYWORD_MAP.items():
         score = 0
+        matched = []
         for keyword in keywords:
             # Use word boundaries so "rain" doesn't match inside "brain"
             if re.search(r'\b' + re.escape(keyword) + r'\b', text_lower):
                 score += len(keyword.split())
+                matched.append(keyword.capitalize())
         if score > 0:
             scores[emergency_type] = score
+            matched_reasons[emergency_type] = matched
 
     if not scores:
         return {
@@ -167,6 +171,7 @@ def classify_emergency_local(text: str) -> dict:
             "confidence": 0.3,
             "method": "keyword_fallback",
             "all_scores": {},
+            "reasons": [],
         }
 
     best_type = max(scores, key=scores.get)  # type: ignore[arg-type]
@@ -179,6 +184,7 @@ def classify_emergency_local(text: str) -> dict:
         "confidence": confidence,
         "method": "keyword_matching",
         "all_scores": scores,
+        "reasons": matched_reasons[best_type],
     }
 
 
@@ -248,18 +254,26 @@ def classify_emergency(text: str) -> dict:
         text: User's emergency description.
 
     Returns:
-        Dict with 'emergency_type', 'confidence', and 'method'.
+        Dict with 'emergency_type', 'confidence', 'method', and 'reasons'.
     """
     if not text or not text.strip():
         return {
             "emergency_type": "Medical Emergency",
             "confidence": 0.0,
             "method": "default",
+            "reasons": [],
         }
 
     # Try HuggingFace API first
     hf_result = classify_emergency_hf(text)
     if hf_result and hf_result.get("confidence", 0) > 0.3:
+        import re
+        text_lower = text.lower().strip()
+        matched = []
+        for keyword in KEYWORD_MAP.get(hf_result["emergency_type"], []):
+            if re.search(r'\b' + re.escape(keyword) + r'\b', text_lower):
+                matched.append(keyword.capitalize())
+        hf_result["reasons"] = matched
         return hf_result
 
     # Fallback to local keyword matching

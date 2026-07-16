@@ -118,6 +118,13 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "bn": "⚠️ অনুগ্রহ করে আপনার জরুরি অবস্থা বর্ণনা করুন।",
     },
 
+    # ── Explainable AI ──
+    "detected_because": {
+        "en": "Detected because:",
+        "hi": "पहचाना गया क्योंकि:",
+        "bn": "চিহ্নিত হয়েছে কারণ:",
+    },
+
     # ── Emergency Numbers ──
     "emergency_numbers": {
         "en": "📞 Emergency Numbers",
@@ -256,6 +263,48 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "en": "📥 Export Results as CSV",
         "hi": "📥 परिणाम CSV में निर्यात करें",
         "bn": "📥 ফলাফল CSV হিসেবে রপ্তানি করুন",
+    },
+
+    # ── Analytics Dashboard ──
+    "analytics_dashboard": {
+        "en": "⭐ Analytics Dashboard",
+        "hi": "⭐ एनालिटिक्स डैशबोर्ड",
+        "bn": "⭐ অ্যানালিটিক্স ড্যাশবোর্ড",
+    },
+    "hospitals_found_stat": {
+        "en": "Hospitals Found",
+        "hi": "अस्पताल मिले",
+        "bn": "হাসপাতাল পাওয়া গেছে",
+    },
+    "blood_banks_nearby_stat": {
+        "en": "Blood Banks Nearby",
+        "hi": "निकटतम ब्लड बैंक",
+        "bn": "কাছাকাছি ব্লাড ব্যাঙ্ক",
+    },
+    "average_distance_stat": {
+        "en": "Average Distance",
+        "hi": "औसत दूरी",
+        "bn": "গড় দূরত্ব",
+    },
+    "search_history_stat": {
+        "en": "Search History",
+        "hi": "खोज इतिहास",
+        "bn": "অনুসন্ধানের ইতিহাস",
+    },
+    "most_common_emergency_stat": {
+        "en": "Most Common Emergency",
+        "hi": "सबसे आम आपातकाल",
+        "bn": "সবচেয়ে সাধারণ জরুরি অবস্থা",
+    },
+    "total_searches_stat": {
+        "en": "Total Searches",
+        "hi": "कुल खोज",
+        "bn": "মোট অনুসন্ধান",
+    },
+    "emergency_search_tab": {
+        "en": "🚨 Emergency Search",
+        "hi": "🚨 आपातकालीन खोज",
+        "bn": "🚨 জরুরি অনুসন্ধান",
     },
 
     # ── Theme ──
