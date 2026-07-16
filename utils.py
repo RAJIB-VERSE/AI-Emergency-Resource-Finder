@@ -601,10 +601,7 @@ def get_emergency_css(dark_mode: bool = True) -> str:
         }}
 
         /* ── Streamlit Overrides ── */
-        header[data-testid="stHeader"] {{
-            background: transparent !important;
-        }}
-        [data-testid="stToolbar"] {{
+        .stDeployButton {{
             display: none !important;
         }}
         /* Hide Streamlit Cloud "Fork" badge */
